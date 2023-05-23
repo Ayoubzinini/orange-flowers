@@ -11,7 +11,7 @@ db=read_excel("orange-folwers-data.xlsx")
 Y=db['Y']
 #Y=[sqrt(i) for i in Y]
 X=db.drop(['Unnamed: 0','Y'],axis=1)
-X1=DataFrame(savgol_filter(X,3,1,1))
+X1=DataFrame(savgol_filter(X,9,1,1))
 X2=msc(X.to_numpy())
 X3=DataFrame(detrend(X))
 #X4=osc(X)

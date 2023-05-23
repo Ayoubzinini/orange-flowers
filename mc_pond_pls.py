@@ -35,6 +35,8 @@ for wave in range(len(wl)):
       pls=PLSRegression(n_components=4,scale=False)
       pls.fit(x_train,y_train)
       fir2c=r2_score(y_train,pls.predict(x_train))
+      fir2c=r2_score(y_test,pls.predict(x_test))
+      fir2c=r2_score(y_train,cross_val_predict(PLSRegression(n_components=4,scale=False),x_train,y_train,cv=LeaveOneOut()))
       income_groups=[y_train,y_test]
       s,p=f_oneway(*income_groups)
       if p<0.05 and fir2c>0:
