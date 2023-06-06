@@ -6,8 +6,8 @@ from scipy.signal import savgol_filter, detrend
 from matplotlib.pyplot import show, rcParams, plot
 from numpy import sqrt, mean
 from statsmodels.multivariate.pca import PCA
-from preproc_NIR import osc, msc, snv, simple_moving_average, centring
-db=read_excel("orange-folwers-data.xlsx")
+from preproc_NIR import osc, msc, snv, simple_moving_average, centring, prep_log
+db=read_excel("orange-flowers-data-mean.xlsx")
 Y=db['Y']
 X=db.drop(['Unnamed: 0','Y'],axis=1)
 X=DataFrame(detrend(msc(savgol_filter(X,3,1,1))))
