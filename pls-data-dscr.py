@@ -7,13 +7,11 @@ from scipy.stats import shapiro, f_oneway
 from scipy.signal import savgol_filter, detrend
 from preproc_NIR import msc, snv
 from numpy import mean,sqrt, std, median
-db=read_excel("orange-folwers-data.xlsx")
+db=read_excel("orane-flowers-data-mean.xlsx")
 Y=db['Y']
 #Y=[sqrt(i) for i in Y]
 X=db.drop(['Unnamed: 0','Y'],axis=1)
-#X=snv(savgol_filter(detrend(X),3,1,1))
-X=savgol_filter(detrend(X),3,1,1)
-X=msc(X,median(X, axis=0))
+X=snv(savgol_filter(X,3,1,1))
 X.index=db['Unnamed: 0']
 j=0
 while True:
@@ -36,7 +34,7 @@ while True:
     R2test=100*r2_score(y_test,model.predict(x_test))
     RMSEtrain=sqrt(mean_squared_error(y_train,model.predict(x_train)))
     RMSEtest=sqrt(mean_squared_error(y_test,model.predict(x_test)))
-    if p<0.05 and R2CV>0 and R2test>0:
+    if R2CV>0 and R2test>0:
         break
     j=j+1
 w,p = shapiro([i-j for i,j in zip(y_test,model.predict(x_test))])

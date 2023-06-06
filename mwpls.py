@@ -10,7 +10,7 @@ from matplotlib.pyplot import plot, show, xlabel, ylabel, title
 from numpy import sqrt, mean
 import time
 import numpy as np
-db=read_excel("orange-folwers-data.xlsx")
+db=read_excel("orane-flowers-data-mean.xlsx")
 X=db.drop(['Unnamed: 0','Y'],axis=1)
 wl=X.columns
 #X=DataFrame(savgol_filter(X,3,1,1))
