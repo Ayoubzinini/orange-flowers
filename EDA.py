@@ -7,11 +7,17 @@ from matplotlib.pyplot import show, rcParams, plot
 from numpy import sqrt, mean
 from statsmodels.multivariate.pca import PCA
 from preproc_NIR import osc, msc, snv, simple_moving_average, centring, prep_log
+from pysptools.spectro import convex_hull_removal
+from dtwalign import dtw
 db=read_excel("orange-flowers-data-mean.xlsx")
 Y=db['Y']
 X=db.drop(['Unnamed: 0','Y'],axis=1)
-X=DataFrame(detrend(msc(savgol_filter(X,3,1,1))))
+wl=X.columns
+X=DataFrame(savgol_filter(X,3,1,1))
+X=detrend(X)
+X=msc(X)
 X.index=db['Unnamed: 0']
+X.columns=wl
 w,p = shapiro(Y)
 if p>0.05:
   desicion="Normal"
@@ -33,6 +39,13 @@ for i in X.index:
     d['Y']=X.loc[i,]
     lineplot(data=d,x='X',y='Y')
 show()
+pc=PCA(X,X.shape[0],method='nipals')
+comps=list(pc.scores.columns)
+for i in pc.scores.columns:
+    comps.remove(i)
+    for j in comps:
+        plot(pc.scores[i],pc.scores[j],".")
+        show()
 """
 pc=PCA(X,X.shape[0],method='nipals')
 for i in pc.loadings.columns:

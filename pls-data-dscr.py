@@ -7,12 +7,20 @@ from scipy.stats import shapiro, f_oneway
 from scipy.signal import savgol_filter, detrend
 from preproc_NIR import msc, snv
 from numpy import mean,sqrt, std, median
-db=read_excel("orane-flowers-data-mean.xlsx")
+from pysptools.spectro import convex_hull_removal
+from dtwalign import dtw
+db=read_excel("orange-flowers-data-mean.xlsx")
 Y=db['Y']
-#Y=[sqrt(i) for i in Y]
+Y=[sqrt(i) for i in Y]
 X=db.drop(['Unnamed: 0','Y'],axis=1)
-X=snv(savgol_filter(X,3,1,1))
+wl=X.columns
+#you should try mwpls to optimize R² CV
+X=msc(X.to_numpy())
+X=DataFrame(savgol_filter(X,3,1,1))
+X=DataFrame(detrend(X)) 
 X.index=db['Unnamed: 0']
+X.columns=wl
+X=X.drop(list(X.columns[(15, 31)[0]:(15, 31)[1]]),axis=1)
 j=0
 while True:
     x_train, x_test, y_train, y_test = train_test_split(X,Y,test_size=0.2,random_state=j)
